@@ -20,8 +20,13 @@ public class SignIn extends Page {
         this.setFieldById(PASSWORD_SELECTO_ID, password);
     }
 
-    public void login(){
+    public void clickLoginButton(){
         this.submitFormById(LOGIN_BUTTON_ID);
     }
 
+    public void login(String email, String password) {
+        setEmail(email);
+        setPassword(password);
+        clickLoginButton();
+    }
 }

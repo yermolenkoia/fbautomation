@@ -6,10 +6,14 @@ import java.util.List;
 
 public class AboutWorkAndEducation extends Page {
     private static final String EDUCATION_LIST_CLASS = "fbProfileEditExperiences";
-    private static final String COMPANY_NAME_NAME = "employer_name";
-    private static final String POSITION_NAME = "position_text";
-    private static final String SUGGESTIONS_LIST_CLASS = "page";
-    private static final String CREATE_NEW_CLASS = "calltoaction";
+    private static final String COMPANY_FIELD_NAME = "employer_name";
+    private static final String POSITION_FIELD_NAME = "position_text";
+    private static final String LOCATION_FIELD_NAME = "location_text";
+    private static final String DESCRIPTION_FIELD_NAME = "description";
+    private static final String SAVE_BUTTON_NAME = "__submit__";
+    private static final String CHECKBOX_CURRENT_NAME = "date[current]";
+    private static final String START_DATE_DATEPICKER_CLASS = "startDate";
+    private static final String END_DATE_DATEPICKER_CLASS = "endDate";
 
     public AboutWorkAndEducation(WebDriver driver) {
         super(driver);
@@ -21,26 +25,53 @@ public class AboutWorkAndEducation extends Page {
         clickElementFromList(elements, 0);
     }
 
-    public void setCompany(String companyName) {
-        setFieldByName(COMPANY_NAME_NAME, companyName);
-        List suggestionsList = getElementsByClass(SUGGESTIONS_LIST_CLASS);
-        if (suggestionsList.size() == 0) {
-            List create = getElementsByClass(CREATE_NEW_CLASS);
-            clickElementFromList(create, 0);
-        } else{
-            clickElementFromList(suggestionsList, 0);
-        }
+    public void setCompany(String company) {
+        setFieldWithSuggestionsList(COMPANY_FIELD_NAME, company);
     }
 
-    public void setPositionName(String positionName) {
-        setFieldByName(POSITION_NAME, positionName);
-        List suggestionsList = getElementsByClass(SUGGESTIONS_LIST_CLASS);
-        if (suggestionsList.size() == 0) {
-            List create = getElementsByClass(CREATE_NEW_CLASS);
-            clickElementFromList(create, 0);
-        } else{
-            clickElementFromList(suggestionsList, 0);
-        }
+    public void setPosition(String position) {
+        setFieldWithSuggestionsList(POSITION_FIELD_NAME, position);
     }
+
+    public void setLocation(String location) {
+        setFieldWithSuggestionsList(LOCATION_FIELD_NAME, location);
+    }
+
+    public void setDescription(String description) {
+        setFieldByName(DESCRIPTION_FIELD_NAME, description);
+    }
+
+    public void saveWorkplace() {
+        submitFormByName(SAVE_BUTTON_NAME);
+    }
+
+    public void setCurrentWorkCheckbox(boolean value) {
+        setCheckBoxByName(CHECKBOX_CURRENT_NAME, value);
+    }
+
+    public void setStartDate(String year) {
+        setDatePicker(START_DATE_DATEPICKER_CLASS, year, "--", "--");
+    }
+
+    public void setStartDate(String year, String month) {
+        setDatePicker(START_DATE_DATEPICKER_CLASS, year, month, "--");
+    }
+
+    public void setStartDate(String year, String month, String day) {
+        setDatePicker(START_DATE_DATEPICKER_CLASS, year, month, day);
+    }
+
+    public void setEndDate(String year) {
+        setDatePicker(END_DATE_DATEPICKER_CLASS, year, "--:", "Day:");
+    }
+
+    public void setEndDate(String year, String month) {
+        setDatePicker(END_DATE_DATEPICKER_CLASS, year, month, "Day:");
+    }
+
+    public void setEndDate(String year, String month, String day) {
+        setDatePicker(END_DATE_DATEPICKER_CLASS, year, month, day);
+    }
+
 
 }
