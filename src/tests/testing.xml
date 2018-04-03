@@ -2,7 +2,7 @@
 
 <suite name = "Test adding work and education">
     <listeners>
-        <listener class-name = "tests.automationFramework.Listener" />
+        <listener class-name = "tests.automationFramework.Listener" configfailurepolicy="continue" />
     </listeners>
 
     <test name = "Add workplace">

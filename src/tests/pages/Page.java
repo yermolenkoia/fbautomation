@@ -3,7 +3,9 @@ package tests.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import tests.automationFramework.Config;
 
 import java.util.List;
@@ -12,6 +14,7 @@ abstract class Page {
     protected String path = "";
     protected WebDriver driver;
     protected Config config;
+    protected WebDriverWait wait;
 
     protected static final String SUGGESTIONS_LIST_CLASS = "page";
     protected static final String CREATE_NEW_CLASS = "calltoaction";
@@ -24,6 +27,8 @@ abstract class Page {
     Page(WebDriver driver) {
         this.driver = driver;
         this.config = new Config();
+        this.wait = new WebDriverWait(driver, 10);
+
     }
 
     public void goTo() {
@@ -46,7 +51,7 @@ abstract class Page {
         getElementsByName(name).get(0).submit();
     }
 
-    protected void submitFormByClass(String className){
+    protected void submitFormByClass(String className) {
         getElementsByClass(className).get(0).submit();
     }
 
@@ -110,8 +115,20 @@ abstract class Page {
         }
     }
 
+    protected void waitUntilElementIsNotVisible(By by) {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+    }
+
+    protected void waitUntilElementIsClickable(By by) {
+        wait.until(ExpectedConditions.elementToBeClickable(by));
+    }
+
     public void logout() {
         getElementsById(DROPDOWN_MENU_ID).get(0).click();
         getElementsByPartialLinktext(LOG_OUT_TEXT).get(0).click();
+    }
+
+    public void refresh(){
+        driver.navigate().refresh();
     }
 }

@@ -1,9 +1,8 @@
 package tests.pages;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -18,9 +17,10 @@ public class AboutWorkAndEducation extends Page {
     private static final String START_DATE_DATEPICKER_CLASS = "startDate";
     private static final String END_DATE_DATEPICKER_CLASS = "endDate";
     private static final String HIDDEN_OPTIONS_CSS = "span._2pih._50f8";
-    private static final String DELETE_WORKPLACE_XPATH = "//div[@id='u_0_2b']/div/ul/li[3]/a/span/span";
+    private static final String DELETE_WORKPLACE_CSS = "div > ul > li:nth-child(3) > a > span > span";
     private static final String DELETE_RADIO_BUTTON_NAME = "action";
     private static final String CONFIRM_WORK_REMOVING_BUTTON_CLASS = "layerConfirm";
+    private static final String WORK_INFO_CSS = "div[class='fsm fwn fcg']";
 
     public AboutWorkAndEducation(WebDriver driver) {
         super(driver);
@@ -50,6 +50,7 @@ public class AboutWorkAndEducation extends Page {
 
     public void saveWorkplace() {
         submitFormByName(SAVE_BUTTON_NAME);
+        waitUntilElementIsNotVisible(By.name(COMPANY_FIELD_NAME));
     }
 
     public void setCurrentWorkCheckbox(boolean value) {
@@ -82,10 +83,19 @@ public class AboutWorkAndEducation extends Page {
 
     public void deleteWorkplace(){
         getElementsByCssSelector(HIDDEN_OPTIONS_CSS).get(0).click();
-        getElementsByXPath(DELETE_WORKPLACE_XPATH).get(0).click();
+        getElementsByCssSelector(DELETE_WORKPLACE_CSS).get(0).click();
         List<WebElement> radioButtons = getElementsByName(DELETE_RADIO_BUTTON_NAME);
         ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", radioButtons.get(1));
         submitFormByClass(CONFIRM_WORK_REMOVING_BUTTON_CLASS);
+        waitUntilElementIsNotVisible(By.className(CONFIRM_WORK_REMOVING_BUTTON_CLASS));
+        waitUntilElementIsNotVisible(By.cssSelector(WORK_INFO_CSS));
+        refresh();
+    }
+
+    public String getWorkInfo(){
+        List<WebElement> elements = getElementsByCssSelector(WORK_INFO_CSS);
+        WebElement workInfo = elements.get(1);
+        return workInfo.getText();
     }
 
 }

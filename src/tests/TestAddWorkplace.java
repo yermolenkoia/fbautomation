@@ -10,7 +10,7 @@ import tests.pages.AboutWorkAndEducation;
 
 public class TestAddWorkplace extends TestBase {
     private AboutWorkAndEducation workAndEducationPage;
-    private static final String COMPANY = "Facebook";
+    private static final String COMPANY = "SoftServe";
 
     @BeforeSuite
     public void setUpClass() {
@@ -21,19 +21,33 @@ public class TestAddWorkplace extends TestBase {
 
     @AfterMethod
     public void tearDown(ITestResult result) {
-        if (result.getStatus() == ITestResult.SUCCESS) {
+        try {
             workAndEducationPage.deleteWorkplace();
+        } finally {
+            super.tearDown(result);
         }
-        super.tearDown(result);
     }
 
     @Test
     public void testAddPastWorkplace() {
+        String startYear = "2000";
+        String startMonth = "January";
+        String startDay = "1";
+        String endYear = "2010";
+        String endMonth = "December";
+        String endDay = "31";
         workAndEducationPage.clickWork();
         workAndEducationPage.setCompany(COMPANY);
         workAndEducationPage.setCurrentWorkCheckbox(false);
-        workAndEducationPage.setStartDate("2000", "January", "1");
-        workAndEducationPage.setEndDate("2010", "December", "31");
+        workAndEducationPage.setStartDate(startYear, startMonth, startDay);
+        workAndEducationPage.setEndDate(endYear, endMonth, endDay);
         workAndEducationPage.saveWorkplace();
+        String expectedStartDate = startMonth + " " + startDay + ", " + startYear;
+        String expectedEndDate = endMonth + " " + endDay + ", " + endYear;
+        String[] actualDates = workAndEducationPage.getWorkInfo().split(" to ");
+        Assert.assertTrue(actualDates[0].contains(expectedStartDate), "Wrong star date! Expected: " + expectedStartDate +
+                " \n Actual: " + actualDates[0]);
+        Assert.assertTrue(actualDates[1].contains(expectedEndDate), "Wrong end date! Expected: " + expectedEndDate +
+                " \n Actual: " + actualDates[1]);
     }
 }
