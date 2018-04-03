@@ -1,5 +1,6 @@
 package tests;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import tests.automationFramework.TestBase;
@@ -20,6 +21,7 @@ public class TestAddWorkplace extends TestBase {
     public void testAddPastWorkplace() {
         workAndEducationPage.clickWork();
         workAndEducationPage.setCompany(COMPANY);
+        Assert.assertTrue(false);
         workAndEducationPage.setCurrentWorkCheckbox(false);
         workAndEducationPage.setStartDate("2000", "January", "1");
         workAndEducationPage.setEndDate("2010", "December", "31");

@@ -4,3 +4,4 @@ Main.java
 *.iml
 chromedriver
 target
+testResults
