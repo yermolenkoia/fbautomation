@@ -35,7 +35,7 @@ abstract class Page {
     }
 
     protected void setFieldByName(String name, String text) {
-        driver.findElement(By.name(name)).sendKeys(text);
+        getElementsByName(name).get(0).sendKeys(text);
     }
 
     protected void submitFormById(String id) {
@@ -43,11 +43,15 @@ abstract class Page {
     }
 
     protected void submitFormByName(String name) {
-        driver.findElement(By.name(name)).submit();
+        getElementsByName(name).get(0).submit();
+    }
+
+    protected void submitFormByClass(String className){
+        getElementsByClass(className).get(0).submit();
     }
 
     protected void setCheckBoxByName(String name, boolean value) {
-        WebElement checkBox = driver.findElement(By.name(name));
+        WebElement checkBox = getElementsByName(name).get(0);
         if (value && !checkBox.isSelected()) {
             checkBox.click();
         } else if (!value && checkBox.isSelected()) {
@@ -79,26 +83,34 @@ abstract class Page {
         return driver.findElements(By.id(id));
     }
 
-    protected List<WebElement> getElementsByPartialLinktext(String partialLinktext){
+    protected List<WebElement> getElementsByPartialLinktext(String partialLinktext) {
         return driver.findElements(By.partialLinkText(partialLinktext));
     }
 
-    protected void clickElementFromList(List<WebElement> elements, Integer elementNum) {
-        elements.get(elementNum).click();
+    protected List<WebElement> getElementsByXPath(String xPath) {
+        return driver.findElements(By.xpath(xPath));
+    }
+
+    protected List<WebElement> getElementsByCssSelector(String cssSelector) {
+        return driver.findElements(By.cssSelector(cssSelector));
+    }
+
+    protected List<WebElement> getElementsByName(String name) {
+        return driver.findElements(By.name(name));
     }
 
     protected void setFieldWithSuggestionsList(String selector, String value) {
         setFieldByName(selector, value);
-        List suggestionsList = getElementsByClass(SUGGESTIONS_LIST_CLASS);
+        List<WebElement> suggestionsList = getElementsByClass(SUGGESTIONS_LIST_CLASS);
         if (suggestionsList.size() == 0) {
-            List create = getElementsByClass(CREATE_NEW_CLASS);
-            clickElementFromList(create, 0);
+            List<WebElement> create = getElementsByClass(CREATE_NEW_CLASS);
+            create.get(0).click();
         } else {
-            clickElementFromList(suggestionsList, 0);
+            suggestionsList.get(0).click();
         }
     }
 
-    public void logout(){
+    public void logout() {
         getElementsById(DROPDOWN_MENU_ID).get(0).click();
         getElementsByPartialLinktext(LOG_OUT_TEXT).get(0).click();
     }

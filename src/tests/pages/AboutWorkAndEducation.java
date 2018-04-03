@@ -1,6 +1,9 @@
 package tests.pages;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -14,6 +17,10 @@ public class AboutWorkAndEducation extends Page {
     private static final String CHECKBOX_CURRENT_NAME = "date[current]";
     private static final String START_DATE_DATEPICKER_CLASS = "startDate";
     private static final String END_DATE_DATEPICKER_CLASS = "endDate";
+    private static final String HIDDEN_OPTIONS_CSS = "span._2pih._50f8";
+    private static final String DELETE_WORKPLACE_XPATH = "//div[@id='u_0_2b']/div/ul/li[3]/a/span/span";
+    private static final String DELETE_RADIO_BUTTON_NAME = "action";
+    private static final String CONFIRM_WORK_REMOVING_BUTTON_CLASS = "layerConfirm";
 
     public AboutWorkAndEducation(WebDriver driver) {
         super(driver);
@@ -21,8 +28,8 @@ public class AboutWorkAndEducation extends Page {
     }
 
     public void clickWork() {
-        List elements = getElementsByClass(EDUCATION_LIST_CLASS);
-        clickElementFromList(elements, 0);
+        List <WebElement> elements = getElementsByClass(EDUCATION_LIST_CLASS);
+        elements.get(0).click();
     }
 
     public void setCompany(String company) {
@@ -73,5 +80,12 @@ public class AboutWorkAndEducation extends Page {
         setDatePicker(END_DATE_DATEPICKER_CLASS, year, month, day);
     }
 
+    public void deleteWorkplace(){
+        getElementsByCssSelector(HIDDEN_OPTIONS_CSS).get(0).click();
+        getElementsByXPath(DELETE_WORKPLACE_XPATH).get(0).click();
+        List<WebElement> radioButtons = getElementsByName(DELETE_RADIO_BUTTON_NAME);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", radioButtons.get(1));
+        submitFormByClass(CONFIRM_WORK_REMOVING_BUTTON_CLASS);
+    }
 
 }
