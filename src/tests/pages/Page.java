@@ -35,28 +35,16 @@ abstract class Page {
         this.driver.get(config.getBase_url() + path);
     }
 
-    protected void setFieldById(String id, String text) {
-        driver.findElement(By.id(id)).sendKeys(text);
+    protected void setField(By by, String text) {
+        driver.findElement(by).sendKeys(text);
     }
 
-    protected void setFieldByName(String name, String text) {
-        getElementsByName(name).get(0).sendKeys(text);
-    }
-
-    protected void submitFormById(String id) {
-        driver.findElement(By.id(id)).submit();
-    }
-
-    protected void submitFormByName(String name) {
-        getElementsByName(name).get(0).submit();
-    }
-
-    protected void submitFormByClass(String className) {
-        getElementsByClass(className).get(0).submit();
+    protected void submitForm(By by) {
+        driver.findElement(by).submit();
     }
 
     protected void setCheckBoxByName(String name, boolean value) {
-        WebElement checkBox = getElementsByName(name).get(0);
+        WebElement checkBox = getElements(By.name(name)).get(0);
         if (value && !checkBox.isSelected()) {
             checkBox.click();
         } else if (!value && checkBox.isSelected()) {
@@ -65,7 +53,7 @@ abstract class Page {
     }
 
     protected void setDatePicker(String className, String year, String month, String day) {
-        WebElement date = (WebElement) getElementsByClass(className).get(0);
+        WebElement date = (WebElement) getElements(By.className(className)).get(0);
         WebElement spanYear = date.findElement(By.className(SELECT_YEAR_CLASS));
         WebElement spanMonth = date.findElement(By.className(SELECT_MONTH_CLASS));
         WebElement spanDay = date.findElement(By.className(SELECT_DAY_CLASS));
@@ -80,35 +68,15 @@ abstract class Page {
         selectYear.selectByVisibleText(textValue);
     }
 
-    protected List<WebElement> getElementsByClass(String className) {
-        return driver.findElements(By.className(className));
-    }
-
-    protected List<WebElement> getElementsById(String id) {
-        return driver.findElements(By.id(id));
-    }
-
-    protected List<WebElement> getElementsByPartialLinktext(String partialLinktext) {
-        return driver.findElements(By.partialLinkText(partialLinktext));
-    }
-
-    protected List<WebElement> getElementsByXPath(String xPath) {
-        return driver.findElements(By.xpath(xPath));
-    }
-
-    protected List<WebElement> getElementsByCssSelector(String cssSelector) {
-        return driver.findElements(By.cssSelector(cssSelector));
-    }
-
-    protected List<WebElement> getElementsByName(String name) {
-        return driver.findElements(By.name(name));
+    protected List<WebElement> getElements(By by) {
+        return driver.findElements(by);
     }
 
     protected void setFieldWithSuggestionsList(String selector, String value) {
-        setFieldByName(selector, value);
-        List<WebElement> suggestionsList = getElementsByClass(SUGGESTIONS_LIST_CLASS);
+        setField(By.name(selector), value);
+        List<WebElement> suggestionsList = getElements(By.className(SUGGESTIONS_LIST_CLASS));
         if (suggestionsList.size() == 0) {
-            List<WebElement> create = getElementsByClass(CREATE_NEW_CLASS);
+            List<WebElement> create = getElements(By.className(CREATE_NEW_CLASS));
             create.get(0).click();
         } else {
             suggestionsList.get(0).click();
@@ -124,11 +92,11 @@ abstract class Page {
     }
 
     public void logout() {
-        getElementsById(DROPDOWN_MENU_ID).get(0).click();
-        getElementsByPartialLinktext(LOG_OUT_TEXT).get(0).click();
+        getElements(By.id(DROPDOWN_MENU_ID)).get(0).click();
+        getElements(By.partialLinkText(LOG_OUT_TEXT)).get(0).click();
     }
 
-    public void refresh(){
+    public void refresh() {
         driver.navigate().refresh();
     }
 }

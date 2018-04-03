@@ -1,5 +1,6 @@
 package tests.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class SignIn extends Page {
@@ -13,15 +14,15 @@ public class SignIn extends Page {
     }
 
     public void setEmail(String email) {
-        this.setFieldById(EMAIL_SELECTOR_ID, email);
+        this.setField(By.id(EMAIL_SELECTOR_ID), email);
     }
 
     public void setPassword(String password) {
-        this.setFieldById(PASSWORD_SELECTO_ID, password);
+        this.setField(By.id(PASSWORD_SELECTO_ID), password);
     }
 
-    public void clickLoginButton(){
-        this.submitFormById(LOGIN_BUTTON_ID);
+    public void clickLoginButton() {
+        this.submitForm(By.id(LOGIN_BUTTON_ID));
     }
 
     public void login(String email, String password) {

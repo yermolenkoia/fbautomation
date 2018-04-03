@@ -1,8 +1,6 @@
 package tests.pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -21,6 +19,8 @@ public class AboutWorkAndEducation extends Page {
     private static final String DELETE_RADIO_BUTTON_NAME = "action";
     private static final String CONFIRM_WORK_REMOVING_BUTTON_CLASS = "layerConfirm";
     private static final String WORK_INFO_CSS = "div[class='fsm fwn fcg']";
+    private static final String EMPLOYER_TITLE_CSS = "div._2tdc > div > div > div > div:nth-child(2) > div._2lzr._50f5._50f7";
+    private static final String DESCRIPTION_CSS = "div > div > div > div > div:nth-child(2) > div._3-8w._50f8";
 
     public AboutWorkAndEducation(WebDriver driver) {
         super(driver);
@@ -28,7 +28,7 @@ public class AboutWorkAndEducation extends Page {
     }
 
     public void clickWork() {
-        List <WebElement> elements = getElementsByClass(EDUCATION_LIST_CLASS);
+        List<WebElement> elements = getElements(By.className(EDUCATION_LIST_CLASS));
         elements.get(0).click();
     }
 
@@ -45,11 +45,11 @@ public class AboutWorkAndEducation extends Page {
     }
 
     public void setDescription(String description) {
-        setFieldByName(DESCRIPTION_FIELD_NAME, description);
+        setField(By.name(DESCRIPTION_FIELD_NAME), description);
     }
 
     public void saveWorkplace() {
-        submitFormByName(SAVE_BUTTON_NAME);
+        submitForm(By.name(SAVE_BUTTON_NAME));
         waitUntilElementIsNotVisible(By.name(COMPANY_FIELD_NAME));
     }
 
@@ -81,21 +81,38 @@ public class AboutWorkAndEducation extends Page {
         setDatePicker(END_DATE_DATEPICKER_CLASS, year, month, day);
     }
 
-    public void deleteWorkplace(){
-        getElementsByCssSelector(HIDDEN_OPTIONS_CSS).get(0).click();
-        getElementsByCssSelector(DELETE_WORKPLACE_CSS).get(0).click();
-        List<WebElement> radioButtons = getElementsByName(DELETE_RADIO_BUTTON_NAME);
+    public void deleteWorkplace() {
+        getElements(By.cssSelector(HIDDEN_OPTIONS_CSS)).get(0).click();
+        getElements(By.cssSelector(DELETE_WORKPLACE_CSS)).get(0).click();
+        List<WebElement> radioButtons = getElements(By.name(DELETE_RADIO_BUTTON_NAME));
         ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", radioButtons.get(1));
-        submitFormByClass(CONFIRM_WORK_REMOVING_BUTTON_CLASS);
+        submitForm(By.className(CONFIRM_WORK_REMOVING_BUTTON_CLASS));
         waitUntilElementIsNotVisible(By.className(CONFIRM_WORK_REMOVING_BUTTON_CLASS));
         waitUntilElementIsNotVisible(By.cssSelector(WORK_INFO_CSS));
         refresh();
     }
 
-    public String getWorkInfo(){
-        List<WebElement> elements = getElementsByCssSelector(WORK_INFO_CSS);
-        WebElement workInfo = elements.get(1);
-        return workInfo.getText();
+    public String getWorkInfo() {
+        return getText(By.cssSelector(WORK_INFO_CSS));
+    }
+
+    public String getEmployerTitle() {
+        return getText(By.cssSelector(EMPLOYER_TITLE_CSS));
+    }
+
+    public String getDescription() {
+        return getText(By.cssSelector(DESCRIPTION_CSS));
+    }
+
+    private String getText(By by) {
+        List<WebElement> elements = getElements(by);
+        for (int i = 0; i < elements.size(); i++) {
+            if (!elements.get(i).equals("")) {
+                WebElement element = elements.get(i);
+                return element.getText();
+            }
+        }
+        return "";
     }
 
 }
