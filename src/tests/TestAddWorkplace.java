@@ -99,4 +99,11 @@ public class TestAddWorkplace extends TestBase {
         String workInfo = workAndEducationPage.getWorkInfo();
         Assert.assertTrue(workInfo.contains(LOCATION), "Wrong location! " + LOCATION + " is not in " + workInfo);
     }
+
+    @Test
+    public void addEmptyEmployer(){
+        workAndEducationPage.clickWork();
+        workAndEducationPage.saveWorkplace();
+        Assert.assertTrue(workAndEducationPage.isInvalidEmployerMessageAppeared(), "Message 'Invalid Employer' doesn't appear");
+    }
 }

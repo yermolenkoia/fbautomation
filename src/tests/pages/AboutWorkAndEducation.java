@@ -21,6 +21,7 @@ public class AboutWorkAndEducation extends Page {
     private static final String WORK_INFO_CSS = "div[class='fsm fwn fcg']";
     private static final String EMPLOYER_TITLE_CSS = "div._2tdc > div > div > div > div:nth-child(2) > div._2lzr._50f5._50f7";
     private static final String DESCRIPTION_CSS = "div > div > div > div > div:nth-child(2) > div._3-8w._50f8";
+    private static final String INVALID_EMPLOYER_MESSAGE_TITLE = "Invalid Employer";
 
     public AboutWorkAndEducation(WebDriver driver) {
         super(driver);
@@ -113,6 +114,12 @@ public class AboutWorkAndEducation extends Page {
             }
         }
         return "";
+    }
+
+    public boolean isInvalidEmployerMessageAppeared() {
+        List <WebElement> elements = getElements(By.partialLinkText(INVALID_EMPLOYER_MESSAGE_TITLE));
+        if (elements.size() == 0) return false;
+        return true;
     }
 
 }
